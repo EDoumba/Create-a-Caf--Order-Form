@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoffeePet</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+    <div class="p-5 mb-5 bg-light">
+    <h2>Order choose</h2>
+
+    <form id="coffeeForm">
+
+        <label for="type">Which coffee would you like to order?</label><br> <br>
+        <input type="radio" name="coffee" value="Turkish $3">Turkish coffee $3 <br>
+        <input type="radio" name="coffee" value="American $5">American coffee $5 <br>
+        <input type="radio" name="coffee" value="Ice $5">Ice coffee $5 <br> <br>
+
+        <label for="extra">Question: Do you need any extras?</label> <br> <br>
+        <input type="checkbox" name="extra" value="Extra coffee 1.5"> Extra coffee 1.5$ <br>
+        <input type="checkbox" name="extra" value="Whipped cream 2">Whipped cream 2$ <br>
+        <input type="checkbox" name="extra" value="Extra caramel 3">Extra caramel 3$ <br> <br>
+
+        <button type="submit" class="submit btn btn-primary">Submit</button>
+    </form>
+
+    <p id="result" class="mt-4"></p>
+    </div>
+
+    <script>
+        document.getElementById('coffeeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const coffeeRadios = document.querySelectorAll('input[name="coffee"]');
+            let selectedCoffee = '';
+            let coffeePrice = 0;
+
+            for (const radio of coffeeRadios) {
+                if (radio.checked) {
+                    selectedCoffee = radio.value;
+                    const priceMatch = radio.value.match(/\$(\d+(\.\d+)?)/);
+                    if (priceMatch) coffeePrice = parseFloat(priceMatch[1]);
+                    break;
+                }
+            }
+
+            const extras = document.querySelectorAll('input[name="extra"]:checked');
+            let extrasList = [];
+            let extrasTotal = 0;
+
+            extras.forEach(extra => {
+                extrasList.push(extra.value);
+                const priceMatch = extra.value.match(/(\d+(\.\d+)?)/);
+                if (priceMatch) extrasTotal += parseFloat(priceMatch[1]);
+            });
+
+            const total = coffeePrice + extrasTotal;
+
+            document.getElementById('result').innerHTML = `
+                <strong>Order Summary:</strong><br>
+                Coffee: ${selectedCoffee}<br>
+                Extras: ${extrasList.join(', ') || 'None'}<br>
+                <strong>Total Price: $${total.toFixed(2)}</strong>
+            `;
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
